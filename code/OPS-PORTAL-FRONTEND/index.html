@@ -1,0 +1,114 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ops-portal-frontend</title>
+  <style>
+/* ============================
+   全局重置 + 主题变量
+   ============================ */
+*{margin:0;padding:0}
+html,body{height:100%}
+#app{min-height:100vh}
+
+/* -------- 浅色主题（默认） -------- */
+:root {
+  --bg-page: #f3f4f6;
+  --bg-card: #f8fafc;
+  --bg-solid: #ffffff;
+  --bg-input: #f0f4f8;
+  --bg-sidebar: #e8edf4;
+  --bg-hover: #f1f5f9;
+  --bg-table-header: #f0f4f8;
+  --bg-badge: #f0f4f8;
+  --bg-modal: #ffffff;
+  --bg-answer: #ffffff;
+  --bg-ticket: #ffffff;
+
+  --text-primary: #334155;
+  --text-heading: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --text-table: #475569;
+  --text-badge: #5b9bd5;
+
+  --border: #e2e8f0;
+  --border-input: #cbd5e1;
+  --border-strong: #d1d5db;
+
+  --blue: #5b9bd5;
+  --blue-hover: #4a8bc2;
+  --blue-glow: rgba(91,155,213,0.15);
+  --orange: #f59e0b;
+  --orange-hover: #d97706;
+  --orange-glow: rgba(245,158,11,0.15);
+
+  --success: #22c55e;
+  --error: #ef4444;
+  --pending-text: #ca8a04;
+  --pending-bg: #fefce8;
+  --processing-text: #3b82f6;
+  --processing-bg: #e8f0fe;
+  --resolved-text: #16a34a;
+  --resolved-bg: #ecfdf5;
+  --frozen-bg: #fef2f2;
+
+  --link-color: #64748b;
+  --link-hover: #94a3b8;
+}
+
+/* -------- 深色主题 -------- */
+[data-theme="dark"] {
+  --bg-page: #13131f;
+  --bg-card: #2a2a3e;
+  --bg-solid: #1a1a2e;
+  --bg-input: #1e1e30;
+  --bg-sidebar: #0e0e1a;
+  --bg-hover: #1e1e2e;
+  --bg-table-header: #13131f;
+  --bg-badge: #1e2a3e;
+  --bg-modal: #1a1a2e;
+  --bg-answer: #222235;
+  --bg-ticket: #222235;
+
+  --text-primary: #e0e0e0;
+  --text-heading: #c0d0e8;
+  --text-secondary: #667;
+  --text-muted: #556;
+  --text-table: #c0c0d8;
+  --text-badge: #8aacce;
+
+  --border: #2a2a40;
+  --border-input: #4a4a65;
+  --border-strong: #444444;
+
+  --blue: #4a6fa5;
+  --blue-hover: #3a5f95;
+  --blue-glow: rgba(74,111,165,0.2);
+  --orange: #c07840;
+  --orange-hover: #b06830;
+  --orange-glow: rgba(192,120,64,0.2);
+
+  --success: #40a860;
+  --error: #e06060;
+  --pending-text: #d4a830;
+  --pending-bg: #3a2e0e;
+  --processing-text: #5090d0;
+  --processing-bg: #0e2240;
+  --resolved-text: #40a860;
+  --resolved-bg: #0e2e18;
+  --frozen-bg: #2e0e0e;
+
+  --link-color: #666;
+  --link-hover: #aaa;
+}
+</style></head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+
+
