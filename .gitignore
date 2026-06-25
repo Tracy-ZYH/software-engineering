@@ -41,3 +41,8 @@ npm-debug.log*
 
 # ngrok binary
 ngrok.exe
+
+# Archives
+*.zip
+*.tar.gz
+*.7z
