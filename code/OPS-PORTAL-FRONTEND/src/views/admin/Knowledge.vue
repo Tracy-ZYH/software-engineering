@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <div class="page-header">
       <h2>知识库管理</h2>
@@ -6,8 +6,8 @@
     </div>
 
     <div class="toolbar">
-      <input v-model="search.keyword" placeholder="搜索关键字" @keyup.enter="loadKnowledge" />
-      <button @click="loadKnowledge">搜索</button>
+      <input v-model="search.keyword" placeholder="搜索关键字" @keyup.enter="page=1;loadKnowledge()" />
+      <button @click="page=1;loadKnowledge()">搜索</button>
     </div>
 
     <div class="table-wrap">
@@ -40,7 +40,7 @@
     </div>
 
     <!-- 新建弹窗 -->
-    <div v-if="showCreate" class="modal-mask" @click.self="showCreate = false">
+    <div v-if="showCreate" class="modal-mask">
       <div class="modal">
         <h3>手动录入知识</h3>
         <label>问题</label>
@@ -60,7 +60,7 @@
     </div>
 
     <!-- 详情弹窗 -->
-    <div v-if="showDetail" class="modal-mask" @click.self="showDetail = false">
+    <div v-if="showDetail" class="modal-mask">
       <div class="modal">
         <h3>知识详情 #{{ detail.id }}</h3>
         <label>问题</label>
@@ -145,7 +145,7 @@ const deleteItem = async (k) => {
   try {
     await request.delete(`/api/knowledge/${k.id}`)
     loadKnowledge()
-  } catch (err) { alert('删除失败：' + (err.response?.data?.detail || err.message)) }
+  } catch (err) { alert('删除失败：' + (typeof err.response?.data?.detail === 'string' ? err.response.data.detail : err.message)) }
 }
 
 onMounted(loadKnowledge)
@@ -200,3 +200,4 @@ label { font-size: 12px; color: var(--text-secondary); letter-spacing: 0.5px; }
 .success { color: var(--resolved-text); font-size: 13px; }
 .error { color: var(--error); font-size: 13px; }
 </style>
+

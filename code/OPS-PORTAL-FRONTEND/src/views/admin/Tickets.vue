@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <div class="page-header">
       <h2>工单管理</h2>
@@ -6,14 +6,14 @@
 
     <!-- 搜索栏 -->
     <div class="toolbar">
-      <input v-model="search.keyword" placeholder="搜索问题" @keyup.enter="loadTickets" />
-      <select v-model="search.status" @change="loadTickets">
+      <input v-model="search.keyword" placeholder="搜索问题" @keyup.enter="page=1;loadTickets()" />
+      <select v-model="search.status" @change="page=1;loadTickets()">
         <option value="">全部状态</option>
         <option value="pending">待处理</option>
         <option value="processing">处理中</option>
         <option value="resolved">已解决</option>
       </select>
-      <button @click="loadTickets">搜索</button>
+      <button @click="page=1;loadTickets()">搜索</button>
     </div>
 
     <!-- 工单列表 -->
@@ -50,7 +50,7 @@
     </div>
 
     <!-- 处理工单弹窗 -->
-    <div v-if="showModal" class="modal-mask" @click.self="showModal = false">
+    <div v-if="showModal" class="modal-mask">
       <div class="modal">
         <h3>处理工单 #{{ current.id }}</h3>
         <p class="modal-question">{{ current.question }}</p>
@@ -161,7 +161,7 @@ const syncKnowledge = async (t) => {
     alert('✅ 同步成功')
     loadTickets()
   } catch (err) {
-    alert('❌ 同步失败：' + (err.response?.data?.detail || err.message))
+    alert('❌ 同步失败：' + (typeof err.response?.data?.detail === 'string' ? err.response.data.detail : err.message))
   }
 }
 
@@ -231,3 +231,4 @@ label { font-size: 12px; color: var(--text-secondary); letter-spacing: 0.5px; }
 .success { color: var(--resolved-text); font-size: 13px; }
 .error { color: var(--error); font-size: 13px; }
 </style>
+

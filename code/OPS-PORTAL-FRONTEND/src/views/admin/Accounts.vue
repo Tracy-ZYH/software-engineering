@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <div class="page-header">
       <h2>账号管理</h2>
@@ -6,18 +6,18 @@
     </div>
 
     <div class="toolbar">
-      <input v-model="search.keyword" placeholder="搜索用户名/姓名" @keyup.enter="loadAccounts" />
-      <select v-model="search.role" @change="loadAccounts">
+      <input v-model="search.keyword" placeholder="搜索用户名/姓名" @keyup.enter="page=1;loadAccounts()" />
+      <select v-model="search.role" @change="page=1;loadAccounts()">
         <option value="">全部角色</option>
         <option value="admin">管理员</option>
         <option value="operator">运维人员</option>
       </select>
-      <select v-model="search.status" @change="loadAccounts">
+      <select v-model="search.status" @change="page=1;loadAccounts()">
         <option value="">全部状态</option>
         <option value="active">正常</option>
         <option value="frozen">已冻结</option>
       </select>
-      <button @click="loadAccounts">搜索</button>
+      <button @click="page=1;loadAccounts()">搜索</button>
     </div>
 
     <div class="table-wrap">
@@ -52,7 +52,7 @@
     </div>
 
     <!-- 新建/编辑弹窗 -->
-    <div v-if="showModal" class="modal-mask" @click.self="showModal = false">
+    <div v-if="showModal" class="modal-mask">
       <div class="modal">
         <h3>{{ isEdit ? '编辑账号' : '新建账号' }}</h3>
         <label>用户名</label>
@@ -129,6 +129,10 @@ const openEdit = (a) => {
 }
 
 const submitForm = async () => {
+  // 前端校验必填字段
+  if (!isEdit.value && !form.username) { formMsg.value = '❌ 请输入用户名'; formLoading.value = false; return }
+  if (!isEdit.value && !form.password) { formMsg.value = '❌ 请输入密码'; formLoading.value = false; return }
+  if (!form.real_name) { formMsg.value = '❌ 请输入真实姓名'; formLoading.value = false; return }
   formLoading.value = true
   formMsg.value = ''
   try {
@@ -144,7 +148,9 @@ const submitForm = async () => {
     setTimeout(() => { showModal.value = false; loadAccounts() }, 800)
   } catch (err) {
     formOk.value = false
-    formMsg.value = '❌ 失败：' + (err.response?.data?.detail || err.message)
+    const _errDetail = err.response?.data?.detail
+      const _errMsg = typeof _errDetail === 'string' ? _errDetail : Array.isArray(_errDetail) ? _errDetail.map(e => e.msg || e.message).join('; ') : err.message
+      formMsg.value = '❌ ' + _errMsg
   } finally { formLoading.value = false }
 }
 
@@ -154,7 +160,7 @@ const toggleStatus = async (a) => {
   try {
     await request.put(`/api/accounts/${a.id}/status`, { status: next })
     loadAccounts()
-  } catch (err) { alert('操作失败：' + (err.response?.data?.detail || err.message)) }
+  } catch (err) { alert('操作失败：' + (typeof err.response?.data?.detail === 'string' ? err.response.data.detail : err.message)) }
 }
 
 const deleteAccount = async (a) => {
@@ -162,7 +168,7 @@ const deleteAccount = async (a) => {
   try {
     await request.delete(`/api/accounts/${a.id}`)
     loadAccounts()
-  } catch (err) { alert('删除失败：' + (err.response?.data?.detail || err.message)) }
+  } catch (err) { alert('删除失败：' + (typeof err.response?.data?.detail === 'string' ? err.response.data.detail : err.message)) }
 }
 
 onMounted(loadAccounts)
@@ -219,3 +225,5 @@ label { font-size: 12px; color: var(--text-secondary); letter-spacing: 0.5px; }
 .success { color: var(--resolved-text); font-size: 13px; }
 .error { color: var(--error); font-size: 13px; }
 </style>
+
+

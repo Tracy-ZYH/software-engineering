@@ -43,7 +43,7 @@ async def chat_query(question: str) -> dict:
     url = f"{API_BASE}/api/v1/workspace/{WORKSPACE}/chat"
     payload = {
         "message": question,
-        "mode": "chat",  # 启用对话模式，让 LLM 基于检索到的知识生成回答
+        "mode": "query",  # 仅向量检索，速度快（不经过 LLM 生成回答）
     }
 
     async with httpx.AsyncClient(timeout=60.0) as client:
@@ -109,4 +109,5 @@ def format_knowledge_text(question: str, answer: str) -> str:
     将问题和答案格式化为知识库文本
     """
     return f"问题：{question}\n解决方案：{answer}"
+
 

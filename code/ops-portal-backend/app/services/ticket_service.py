@@ -138,16 +138,27 @@ class TicketService:
                 detail="工单缺少处理方案，请先填写处理方案",
             )
 
-        # 1. 写入本地知识库表
-        knowledge = OpsKnowledge(
-            question=ticket.question,
-            answer=ticket.resolution,
-            category=category or "工单处理",
-            source=KnowledgeSource.TICKET,
-            source_ticket_id=ticket.id,
-            created_by=self.operator.id if self.operator else None,
-        )
-        self.db.add(knowledge)
+        # 1. 写入本地知识库表（覆盖：已存在则更新，否则新增）
+        existing_kb = self.db.query(OpsKnowledge).filter(
+            OpsKnowledge.source_ticket_id == ticket.id,
+            OpsKnowledge.source == KnowledgeSource.TICKET,
+        ).first()
+        if existing_kb:
+            existing_kb.question = ticket.question
+            existing_kb.answer = ticket.resolution
+            existing_kb.category = category or "工单处理"
+            knowledge = existing_kb
+            print(f"[Sync] 工单 #{ticket_id} 本地知识已存在，更新知识条目 #{existing_kb.id}")
+        else:
+            knowledge = OpsKnowledge(
+                question=ticket.question,
+                answer=ticket.resolution,
+                category=category or "工单处理",
+                source=KnowledgeSource.TICKET,
+                source_ticket_id=ticket.id,
+                created_by=self.operator.id if self.operator else None,
+            )
+            self.db.add(knowledge)
 
         # 2. 更新工单标记
         ticket.is_added_to_kb = 1

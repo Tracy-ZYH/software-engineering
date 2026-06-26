@@ -21,10 +21,10 @@
       ></textarea>
       <div class="btn-row">
   <div class="quick-contacts">
-    <a href="tel:13302332400" class="btn-contact">
-      <i class="ti ti-phone" aria-hidden="true"></i>拨打热线
+    <a href="javascript:void(0)" class="btn-contact" title="复制电话：13302332400" @click.prevent="copyPhone">
+      <i class="ti ti-phone" aria-hidden="true"></i><span id="phoneBtnText">拨打热线</span>
     </a>
-    <a href="mailto:ops@company.com?subject=运维问题反馈&body=问题描述：" class="btn-contact">
+    <a href="mailto:ops@company.com?subject=运维问题反馈&body=%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%EF%BC%9A" class="btn-contact" title="发邮件至 ops@company.com">
       <i class="ti ti-mail" aria-hidden="true"></i>发送邮件
     </a>
   </div>
@@ -122,6 +122,25 @@ const askQuestion = async () => {
     showTicketForm.value = true
   } finally {
     loading.value = false
+  }
+}
+
+const copyPhone = async () => {
+  const btn = document.getElementById('phoneBtnText')
+  try {
+    await navigator.clipboard.writeText('13302332400')
+    btn.textContent = '✓ 已复制'
+    setTimeout(() => { btn.textContent = '拨打热线' }, 2000)
+  } catch {
+    // Fallback: select text method
+    const ta = document.createElement('textarea')
+    ta.value = '13302332400'
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    document.body.removeChild(ta)
+    btn.textContent = '✓ 已复制'
+    setTimeout(() => { btn.textContent = '拨打热线' }, 2000)
   }
 }
 

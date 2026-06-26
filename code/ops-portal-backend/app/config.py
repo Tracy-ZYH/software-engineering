@@ -24,9 +24,12 @@ DATABASE_URL = (
 
 
 RAG_CONFIG = {
-    "api_base": os.getenv("RAG_API_BASE", "https://sloped-putt-unable.ngrok-free.dev"),
-    "api_key": os.getenv("RAG_API_KEY", "ZTF2D6Y-K6940ZG-QC297EN-CZPHCSE"),
-    "workspace": os.getenv("RAG_WORKSPACE", "fqa"),
+    # 本地 AnythingLLM 服务地址
+    "api_base": os.getenv("RAG_API_BASE", "http://localhost:3001"),
+    # AnythingLLM API 密钥
+    "api_key": os.getenv("RAG_API_KEY", "DJBEYXB-1V6MF7X-NB814CT-39RDN05"),
+    # 工作区 slug（在 AnythingLLM 工作区设置中查看）
+    "workspace": os.getenv("RAG_WORKSPACE", "8e0de4ab-73c9-47e2-80a9-edacc76f3449"),
 }
 
 # ============================================================
@@ -43,5 +46,4 @@ JWT_CONFIG = {
 # ============================================================
 SERVER_HOST = os.getenv("SERVER_HOST", "0.0.0.0")
 SERVER_PORT = int(os.getenv("SERVER_PORT", "8000"))
-
 
