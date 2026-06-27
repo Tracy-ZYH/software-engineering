@@ -63,7 +63,7 @@ async def chat_query(question: str) -> dict:
 # ============================================================
 # 2. 文本上传接口
 # ============================================================
-
+'''
 async def upload_raw_text(
     text_content: str,
     title: str = "运维FAQ-自动录入",
@@ -82,7 +82,7 @@ async def upload_raw_text(
     url = f"{API_BASE}/api/v1/document/raw-text"
     payload = {
         "textContent": text_content,
-        "addToWorkspaces": [WORKSPACE],  # API 要求数组格式
+        "addToWorkspaces": WORKSPACE,  # API 要求数组格式
         "metadata": {
             "title": title,
             "docAuthor": doc_author,
@@ -103,11 +103,51 @@ async def upload_raw_text(
         except httpx.RequestError as e:
             raise RAGClientError(f"RAG 服务连接失败: {str(e)}")
 
+'''
+async def upload_raw_text(
+    text_content: str,
+    title: str = "运维FAQ-自动录入",
+    doc_author: str = "运维系统",
+    description: str = "工单处理完成后自动录入",
+) -> dict:
+    """
+    直接将文本内容上传到知识库
+    :param text_content: 文本内容（建议格式："问题：xxx\n解决方案：xxx"）
+    :param title:        文档标题
+    :param doc_author:   文档作者
+    :param description:  文档描述
+    :return: 上传结果
+    :raises RAGClientError: 调用失败时
+    """
+    url = f"{API_BASE}/api/v1/document/raw-text"
+    payload = {
+        "textContent": text_content,
+        "addToWorkspaces": WORKSPACE,
+        "metadata": {
+            "title": title,
+            "docAuthor": doc_author,
+            "description": description,
+        },
+    }
+
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        try:
+            response = await client.post(url, json=payload, headers=HEADERS)
+            response.raise_for_status()
+            return response.json()
+        except httpx.HTTPStatusError as e:
+            raise RAGClientError(
+                f"RAG 文本上传失败: HTTP {e.response.status_code} - {e.response.text}",
+                status_code=e.response.status_code,
+            )
+        except httpx.RequestError as e:
+            raise RAGClientError(f"RAG 服务连接失败: {str(e)}")
 
 def format_knowledge_text(question: str, answer: str) -> str:
     """
     将问题和答案格式化为知识库文本
     """
     return f"问题：{question}\n解决方案：{answer}"
+
 
 

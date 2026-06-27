@@ -1,4 +1,4 @@
-"""
+﻿"""
 工单管理业务逻辑
 """
 from datetime import datetime, timezone
@@ -165,30 +165,21 @@ class TicketService:
         self.db.commit()
         self.db.refresh(knowledge)
 
-        # 3. 调用 AnythingLLM 文本上传接口（失败不阻塞本地保存）
+        # 3. 调用 AnythingLLM 文本上传接口（旧版逻辑：直接调用，不吞异常）
         text_content = format_knowledge_text(ticket.question, ticket.resolution)
-        rag_success = False
-        try:
-            rag_result = await upload_raw_text(
-                text_content=text_content,
-                title=f"工单#{ticket.id}-{ticket.question[:30]}",
-                doc_author=self.operator.real_name if self.operator else "运维系统",
-            )
-            rag_success = True
-            print(f"[Sync] 工单 #{ticket_id} RAG 上传成功")
-        except Exception as e:
-            rag_result = {"error": str(e), "success": False}
-            print(f"[Sync] 工单 #{ticket_id} RAG 上传失败: {e}")
+        rag_result = await upload_raw_text(
+            text_content=text_content,
+            title=f"工单#{ticket.id}-{ticket.question[:30]}",
+            doc_author=self.operator.real_name if self.operator else "运维系统",
+        )
 
         self._log_operation("SYNC_KB", "TICKET", ticket_id,
-                            f"工单同步到知识库, RAG结果: {rag_result.get('success', False)}")
+                            f"工单同步到知识库, RAG结果: {rag_result.get('success')}")
 
         return {
             "knowledge_id": knowledge.id,
             "rag_result": rag_result,
-        }
-
-    # -----------------------------------------------------------
+        }    # -----------------------------------------------------------
     # 内部：记录操作日志
     # -----------------------------------------------------------
     def _log_operation(self, action: str, target_type: str,
@@ -202,3 +193,4 @@ class TicketService:
         )
         self.db.add(log)
         self.db.commit()
+

@@ -22,14 +22,17 @@ DATABASE_URL = (
 )
 
 
-
+'''
 RAG_CONFIG = {
-    # 本地 AnythingLLM 服务地址
-    "api_base": os.getenv("RAG_API_BASE", "http://localhost:3001"),
-    # AnythingLLM API 密钥
-    "api_key": os.getenv("RAG_API_KEY", "DJBEYXB-1V6MF7X-NB814CT-39RDN05"),
-    # 工作区 slug（在 AnythingLLM 工作区设置中查看）
-    "workspace": os.getenv("RAG_WORKSPACE", "8e0de4ab-73c9-47e2-80a9-edacc76f3449"),
+    "api_base": os.getenv("RAG_API_BASE", "https://snowless-chemist-expert.ngrok-free.dev"),
+    "api_key": os.getenv("RAG_API_KEY", "ED3AKH7-E7BM98R-N3TFF50-YF2HAEA"),
+    "workspace": os.getenv("RAG_WORKSPACE", "fqa"),
+}
+'''
+RAG_CONFIG = {
+    "api_base": os.getenv("RAG_API_BASE", "https://sloped-putt-unable.ngrok-free.dev"),
+    "api_key": os.getenv("RAG_API_KEY", "ZTF2D6Y-K6940ZG-QC297EN-CZPHCSE"),
+    "workspace": os.getenv("RAG_WORKSPACE", "fqa"),
 }
 
 # ============================================================
